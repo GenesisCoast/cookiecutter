@@ -304,6 +304,9 @@ def prompt_for_config(
         elif key.startswith('__'):
             cookiecutter_dict[key] = render_variable(env, raw, cookiecutter_dict)
             continue
+        elif key.startswith('#'):
+            Padding(f"[red bold]{key.lstrip('#').strip()}[/]", (2, 0, 1, 0))
+            continue
 
         if not isinstance(raw, dict):
             count += 1
@@ -339,7 +342,7 @@ def prompt_for_config(
     # Second pass; handle the dictionaries.
     for key, raw in context['cookiecutter'].items():
         # Skip private type dicts not to be rendered.
-        if key.startswith('_') and not key.startswith('__'):
+        if key.startswith('_') and not key.startswith('__') and not key.startswith('#'):
             continue
 
         try:
